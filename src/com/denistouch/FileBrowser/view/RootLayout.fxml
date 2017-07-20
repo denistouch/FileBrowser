@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane prefHeight="358.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.denistouch.FileBrowser.view.RootLayoutController">
+   <top>
+      <GridPane prefHeight="22.0" prefWidth="627.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="0.0" prefWidth="2.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="438.0" minWidth="10.0" prefWidth="438.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="up" fitHeight="22.0" fitWidth="25.0" nodeOrientation="INHERIT" onMouseClicked="#setOnUpHandler" onMouseEntered="#setOnMouseEntered" onMouseExited="#setOnMouseExited" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="pathField" prefWidth="455.0" GridPane.columnIndex="1" />
+            <TextField fx:id="findField" prefWidth="170.0" promptText="Search files in this folder" GridPane.columnIndex="2" />
+         </children>
+      </GridPane>
+   </top>
+   <center>
+      <ListView fx:id="listFile" editable="true" prefHeight="251.0" prefWidth="623.0">
+         <contextMenu>
+            <ContextMenu fx:id="contextMenu">
+              <items>
+                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#setOnOpenHandler" text="Open" />
+                  <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#setOnNewHandler" text="New" />
+                  <MenuItem mnemonicParsing="false" onAction="#setAddToFavoriteHandler" text="Add to Favorite" visible="false" />
+                  <MenuItem fx:id="cutItem" mnemonicParsing="false" onAction="#setOnCutHandler" text="Cut" />
+                  <MenuItem fx:id="copyItem" mnemonicParsing="false" onAction="#setOnCopyHandler" text="Copy" />
+                <MenuItem fx:id="pasteItem" mnemonicParsing="false" onAction="#setOnPasteHandler" text="Paste" />
+                  <MenuItem fx:id="renameItem" mnemonicParsing="false" onAction="#setOnRenameHandler" text="Rename" />
+                  <MenuItem fx:id="deleteItem" mnemonicParsing="false" onAction="#setOnDeleteHandler" text="Delete" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </ListView>
+   </center>
+   <bottom>
+      <HBox prefHeight="49.0" prefWidth="658.0">
+         <children>
+            <ImageView fx:id="image" fitHeight="57.0" fitWidth="91.0" onMouseClicked="#setAboutHandler" onMouseEntered="#setOnMouseEntered" onMouseExited="#setOnMouseExited" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="fileInfo" text="file info" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="480.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.makery.address.view.RootLayoutController">
+   <center>
+      <TextArea fx:id="textArea" prefHeight="356.0" prefWidth="486.0" BorderPane.alignment="CENTER" />
+   </center>
+   <top>
+      <MenuBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="10.0" prefWidth="841.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Файл">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleNew" text="Новый">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpen" text="Открыть...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Сохранить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Сохранить как..." />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Выход" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Правка">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleUndo" text="Отменить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleRedo" text="Повторить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Y" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="cut" mnemonicParsing="false" onAction="#handleCut" text="Вырезать">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="copy" mnemonicParsing="false" onAction="#handleCopy" text="Копировать">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handlePaste" text="Вставить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+              <MenuItem mnemonicParsing="false" onAction="#handleDelete" text="Удалить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="DELETE" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleReplace" text="Заменить">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleGoToLine" text="Перейти">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="G" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleFindSelect" text="Find" visible="false">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleSelectAll" text="Выделить всё">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleTimeAndDate" text="Время и дата">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F5" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Формат">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleFont" text="Шрифт" />
+                  <CheckMenuItem fx:id="wrapping" mnemonicParsing="false" text="Перенос по словам" />
+                  <CheckMenuItem fx:id="labelShow" mnemonicParsing="false" text="Строка состояния" />
+               </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Помощь">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleUserGuide" text="Руководство пользователя">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F1" control="ANY" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="О программе" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false">
+               <graphic>
+                  <HBox prefHeight="22.0" prefWidth="200.0">
+                     <children>
+                        <ToggleButton fx:id="button" mnemonicParsing="false" prefHeight="22.0" prefWidth="44.0" text="A=a">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </ToggleButton>
+                        <TextField fx:id="textField" prefHeight="22.0" prefWidth="130.0" promptText="Найти(CTRL+F)" styleClass="text-field" />
+                        <Button fx:id="down" mnemonicParsing="false" onAction="#handleDown" prefHeight="22.0" prefWidth="10.0" text="↓">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="up" mnemonicParsing="false" onAction="#handleUp" prefHeight="22.0" prefWidth="10.0" text="↑">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </graphic>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <Label fx:id="label" alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" styleClass="background" text="Label" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>
