@@ -42,7 +42,7 @@ public class RootLayoutController {
     /*@FXML
     private ProgressIndicator loadIndicator;*/
     @FXML
-    private ImageView up;
+    private ImageView icon;
     @FXML
     private Label fileInfo;
     @FXML
@@ -61,6 +61,8 @@ public class RootLayoutController {
     private MenuItem renameItem;
     @FXML
     private MenuItem deleteItem;
+    /*@FXML
+    private MenuItem showItem;*/
 
     private File path;
     private File tmp;
@@ -84,16 +86,17 @@ public class RootLayoutController {
             @Override
             public void run() {
                 listFile.requestFocus();
-                listRoots = new ArrayList<String>();
-                for (File file : File.listRoots())
-                    listRoots.add(FileSystemView.getFileSystemView().getSystemIcon(file) + " " + file.getAbsolutePath());
-                listFile.setItems(FXCollections.observableArrayList(listRoots));
             }
         });
+        listRoots = new ArrayList<String>();
+        for (File file : File.listRoots())
+            listRoots.add(FileSystemView.getFileSystemView().getSystemIcon(file) + " " + file.getAbsolutePath());
+        listFile.setItems(FXCollections.observableArrayList(listRoots));
         pathField.setText(pc);
         fileInfo.setText(null);
-        up.setImage(new Image(MainApp.class.getResourceAsStream("icon/up.png")));
+        icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/pc.png")));
         image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
+
         pathField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -130,18 +133,26 @@ public class RootLayoutController {
         listFile.itemsProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (path != null)
-                    if (path.getParent() != null)
-                        pathField.setText(path.getName());
-                    else
-                        pathField.setText(FileSystemView.getFileSystemView().getSystemIcon(path) + " " + path.getAbsolutePath());
+
+                if (path == null) {
+                    pathField.setText(pc);
+                    icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/pc.png")));
+                    //icon.setImage(Icon.getFileIcon(FileSystemView.getFileSystemView().getParentDirectory(path).getAbsolutePath()));
+                } else if (path.getParent() == null) {
+                    pathField.setText(FileSystemView.getFileSystemView().getSystemIcon(path) + " " + path.getAbsolutePath());
+                    icon.setImage(Icon.getFileIcon(path.getAbsolutePath()));
+                } else {
+                    pathField.setText(path.getName());
+                    //icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                    icon.setImage(Icon.getFileIcon(path.getAbsolutePath()));
+                }
             }
         });
 
         listFile.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                listFile.setEditable(false);
+                //listFile.setEditable(false);
                 if (event.getCode() == KeyCode.ENTER) {
                     setOnOpenHandler();
                 } else if (event.getCode() == KeyCode.ESCAPE) {
@@ -162,15 +173,15 @@ public class RootLayoutController {
                     if (path == null) {
                         pathString = listFile.getSelectionModel().getSelectedItem().toString().substring(listFile.getSelectionModel().getSelectedItem().toString().lastIndexOf(" ") + 1);
                         tmp = new File(pathString);
-                        fileInfo.setText(tmp.getAbsolutePath() +  "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
+                        fileInfo.setText(tmp.getAbsolutePath() + "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
                     } else if (path.getParent() == null) {
                         pathString = path.getAbsolutePath() + listFile.getSelectionModel().getSelectedItem();
                         tmp = new File(pathString);
-                        fileInfo.setText(tmp.getName() +  "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
+                        fileInfo.setText(tmp.getName() + "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
                     } else {
                         pathString = path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem();
                         tmp = new File(pathString);
-                        fileInfo.setText(tmp.getName() +  "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
+                        fileInfo.setText(tmp.getName() + "\n" + FileSystemView.getFileSystemView().getSystemIcon(tmp));
                     }
                 }
             }
@@ -197,7 +208,6 @@ public class RootLayoutController {
                 textField.setText(getItem());
                 setText(null);
                 setGraphic(textField);
-                textField.selectAll();
                 textField.requestFocus();
             }
 
@@ -212,12 +222,13 @@ public class RootLayoutController {
                     setText(getItem());
                     if (path == null) {
                         imageView.setImage(Icon.getFileIcon(getItem().substring(getItem().lastIndexOf(" ") + 1)));
-                    } else if (path.getParent() == null && new File(path.getAbsolutePath() + File.separator + getItem()).isDirectory())
-                        imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
-                    else {
+                    } else if (path.getParent() == null && new File(path.getAbsolutePath() + File.separator + getItem()).isDirectory()) {
+                        //imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                        imageView.setImage(Icon.getFileIcon(path.getAbsolutePath() + getItem()));
+                    } else {
                         imageView.setImage(Icon.getFileIcon(path.getAbsolutePath() + File.separator + getItem()));
                     }
-                    setText(getItem());
+                    //setText(getItem());
                     setGraphic(imageView);
                 }
             }
@@ -230,18 +241,15 @@ public class RootLayoutController {
                     imageView.setImage(Icon.getFileIcon(getItem().substring(getItem().lastIndexOf(" ") + 1)));
                 } else if (path.getParent() == null && new File(path.getAbsolutePath() + File.separator + getItem()).isDirectory()) {
                     if (newFolder) {
-                        //if (!new File(path.getAbsolutePath() + getText()).mkdir())
-                            //throw new IOException("Папка не создана, такая папка уже существует.");
-                            //System.out.println("Dir not created " + getText());
+                        new File(path.getAbsolutePath() + getText()).mkdir();
                     } else {
                         new File(path.getAbsolutePath() + name).renameTo(new File(path.getAbsolutePath() + getText()));
                     }
-                    imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                    //imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                    imageView.setImage(Icon.getFileIcon(path.getAbsolutePath() + getItem()));
                 } else {
                     if (newFolder) {
-                        //if (!new File(path.getAbsolutePath() + File.separator + getText()).mkdir())
-                            //throw new IOException("Папка не создана, такая папка уже существует.");
-                            //System.out.println("Dir not created " + getText());
+                        new File(path.getAbsolutePath() + getText()).mkdir();
                     } else {
                         new File(path.getAbsolutePath() + name).renameTo(new File(path.getAbsolutePath() + getText()));
                     }
@@ -271,11 +279,11 @@ public class RootLayoutController {
                     setText(null);
                     setGraphic(textField);
                 } else {
-                    //if (pathField.getText().equals(pc)) {
                     if (path == null) {
                         imageView.setImage(Icon.getFileIcon(name.substring(name.lastIndexOf(" ") + 1)));
                     } else if (path.getParent() == null && new File(path.getAbsolutePath() + File.separator + getItem()).isDirectory())
-                        imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                        //imageView.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
+                        imageView.setImage(Icon.getFileIcon(path.getAbsolutePath() + getItem()));
                     else {
                         imageView.setImage(Icon.getFileIcon(path.getAbsolutePath() + File.separator + name));
                     }
@@ -319,7 +327,7 @@ public class RootLayoutController {
                         newItem.setVisible(true);
                         cutItem.setVisible(true);
                         copyItem.setVisible(true);
-                        pasteItem.setVisible(true);
+                        pasteItem.setVisible(tmp != null);
                         renameItem.setVisible(true);
                         deleteItem.setVisible(true);
                     }
@@ -339,7 +347,7 @@ public class RootLayoutController {
                         newItem.setVisible(true);
                         cutItem.setVisible(false);
                         copyItem.setVisible(false);
-                        pasteItem.setVisible(tmp!=null);
+                        pasteItem.setVisible(tmp != null);
                         renameItem.setVisible(false);
                         deleteItem.setVisible(false);
                         //System.out.println("new.visible(true)\n" + "paste.visible(true)\n" + "other.visible(false)");
@@ -420,9 +428,8 @@ public class RootLayoutController {
             if (path.exists() && path.isDirectory() && path != null)
                 listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
         } else {
-            listFile.setItems(FXCollections.observableArrayList(listRoots));
             path = null;
-            pathField.setText(pc);
+            listFile.setItems(FXCollections.observableArrayList(listRoots));
         }
         findField.setText("");
         listFile.scrollTo(0);
@@ -559,8 +566,19 @@ public class RootLayoutController {
 
     @FXML
     private void setAddToFavoriteHandler() {
-        System.out.println(listFile.getSelectionModel().getSelectedItem());
-        listFavorite.getItems().add(listFile.getSelectionModel().getSelectedItem());
+        /*System.out.println(listFile.getSelectionModel().getSelectedItem());
+        listFavorite.getItems().add(listFile.getSelectionModel().getSelectedItem());*/
+        if (listFile.getSelectionModel().getSelectedItem() != null) {
+            if (path.getParent() == null)
+                //image.setImage(new Image(new File(path.getAbsolutePath() + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), true));
+                mainApp.getRootLayout().setRight(new ImageView(new Image(new File(path.getAbsolutePath() +  listFile.getSelectionModel().getSelectedItem()).toURI().toString(), 160, 160, true, true, true)));
+            else if (path != null && path.getParent() != null)
+                //image.setImage(new Image(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), true));
+                mainApp.getRootLayout().setRight(new ImageView(new Image(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), 160, 160, true, true, true)));
+        } //else
+            //image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
+            //mainApp.getRootLayout().setRight(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/explorer.png"))));
+        //mainApp.getRootLayout().setRight(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/explorer.png"))));
     }
 
     @FXML
@@ -571,16 +589,5 @@ public class RootLayoutController {
         alert.setContentText("Author: SmirnovDS\n@null_ds");
         alert.showAndWait();
     }
-
-    @FXML
-    private void setOnMouseEntered() {
-        mainApp.getPrimaryStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    private void setOnMouseExited() {
-        mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
 
 }

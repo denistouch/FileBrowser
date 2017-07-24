@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 /**
@@ -14,7 +15,7 @@ import java.io.IOException;
  */
 public class MainApp extends Application {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -22,18 +23,18 @@ public class MainApp extends Application {
     private BorderPane rootLayout;
 
     @Override
-    public void start(Stage primaryStage)   {
+    public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("File Browser");
         initRootLayout();
     }
 
-    public MainApp(){
+    public MainApp() {
 
     }
 
-    public void initRootLayout()    {
-        try{
+    public void initRootLayout() {
+        try {
             primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
@@ -43,12 +44,16 @@ public class MainApp extends Application {
             RootLayoutController controller = loader.getController();
             controller.setMainApp(this);
             primaryStage.show();
-        }   catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public BorderPane getRootLayout() {
+        return rootLayout;
     }
 }

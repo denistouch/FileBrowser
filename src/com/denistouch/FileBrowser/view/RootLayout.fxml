@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -14,20 +17,31 @@
 
 <BorderPane prefHeight="358.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.denistouch.FileBrowser.view.RootLayoutController">
    <top>
-      <GridPane prefHeight="22.0" prefWidth="627.0">
+      <GridPane hgap="2.0" prefHeight="28.0" prefWidth="658.0" vgap="2.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.0" minWidth="0.0" prefWidth="2.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="438.0" minWidth="10.0" prefWidth="438.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="189.0" minWidth="30.0" prefWidth="30.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="189.0" minWidth="30.0" prefWidth="37.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="461.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="30.0" prefWidth="152.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fx:id="up" fitHeight="22.0" fitWidth="25.0" nodeOrientation="INHERIT" onMouseClicked="#setOnUpHandler" onMouseEntered="#setOnMouseEntered" onMouseExited="#setOnMouseExited" pickOnBounds="true" preserveRatio="true" />
-            <TextField fx:id="pathField" prefWidth="455.0" GridPane.columnIndex="1" />
-            <TextField fx:id="findField" prefWidth="170.0" promptText="Search files in this folder" GridPane.columnIndex="2" />
+            <TextField fx:id="pathField" prefWidth="455.0" GridPane.columnIndex="2" />
+            <TextField fx:id="findField" prefWidth="170.0" promptText="Search files in this folder" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" onAction="#setOnUpHandler" prefHeight="22.0" prefWidth="34.0" text="...">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <ImageView fx:id="icon" fitHeight="16.0" fitWidth="16.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
          </children>
+         <padding>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </GridPane>
    </top>
    <center>
@@ -37,7 +51,7 @@
               <items>
                   <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#setOnOpenHandler" text="Open" />
                   <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#setOnNewHandler" text="New" />
-                  <MenuItem mnemonicParsing="false" onAction="#setAddToFavoriteHandler" text="Add to Favorite" visible="false" />
+                  <MenuItem fx:id="showItem" mnemonicParsing="false" onAction="#setAddToFavoriteHandler" text="Show" visible="false" />
                   <MenuItem fx:id="cutItem" mnemonicParsing="false" onAction="#setOnCutHandler" text="Cut" />
                   <MenuItem fx:id="copyItem" mnemonicParsing="false" onAction="#setOnCopyHandler" text="Copy" />
                 <MenuItem fx:id="pasteItem" mnemonicParsing="false" onAction="#setOnPasteHandler" text="Paste" />
@@ -51,7 +65,10 @@
    <bottom>
       <HBox prefHeight="49.0" prefWidth="658.0">
          <children>
-            <ImageView fx:id="image" fitHeight="57.0" fitWidth="91.0" onMouseClicked="#setAboutHandler" onMouseEntered="#setOnMouseEntered" onMouseExited="#setOnMouseExited" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="image" fitHeight="57.0" fitWidth="91.0" onMouseClicked="#setAboutHandler" pickOnBounds="true" preserveRatio="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ImageView>
             <Label fx:id="fileInfo" text="file info" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
