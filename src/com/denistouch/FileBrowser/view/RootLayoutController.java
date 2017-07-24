@@ -95,7 +95,7 @@ public class RootLayoutController {
         pathField.setText(pc);
         fileInfo.setText(null);
         icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/pc.png")));
-        image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
+        image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer_new.png")));
 
         pathField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
