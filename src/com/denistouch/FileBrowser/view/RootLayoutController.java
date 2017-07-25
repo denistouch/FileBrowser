@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.ArrayList;
@@ -39,8 +40,6 @@ public class RootLayoutController {
     private TextField findField;
     @FXML
     private ImageView image;
-    /*@FXML
-    private ProgressIndicator loadIndicator;*/
     @FXML
     private ImageView icon;
     @FXML
@@ -63,6 +62,8 @@ public class RootLayoutController {
     private MenuItem deleteItem;
     /*@FXML
     private MenuItem showItem;*/
+    /*@FXML
+    private ProgressIndicator loadIndicator;*/
 
     private File path;
     private File tmp;
@@ -360,7 +361,6 @@ public class RootLayoutController {
 
     }
 
-
     @FXML
     private void setOnOpenHandler() {
         //эта эпопея для точного перемещения по каталогам и файлам
@@ -422,17 +422,42 @@ public class RootLayoutController {
 
     @FXML
     private void setOnUpHandler() {
-        //if (!pathField.getText().equals(pc) && pathField.getText().length() != 3) {
-        if (path != null && path.getParent() != null) {
-            path = path.getParentFile();
-            if (path.exists() && path.isDirectory() && path != null)
-                listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
-        } else {
-            path = null;
-            listFile.setItems(FXCollections.observableArrayList(listRoots));
+        if (path != null) {
+            mainApp.getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(200);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    } finally {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+                                path = path.getParentFile();
+                                if (path == null)
+                                    listFile.setItems(FXCollections.observableArrayList(listRoots));
+                                else if (path.exists() && path.isDirectory())
+                                    listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
+                                findField.setText("");
+                                listFile.scrollTo(0);
+                            /*if (path != null && path.getParent() != null) {
+                                path = path.getParentFile();
+                                if (path.exists() && path.isDirectory() && path != null)
+                                    listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
+                            } else {
+                                path = null;
+                                listFile.setItems(FXCollections.observableArrayList(listRoots));
+                            }
+                            */
+                            }
+                        });
+                    }
+                }
+            }).start();
         }
-        findField.setText("");
-        listFile.scrollTo(0);
     }
 
     @FXML
@@ -440,6 +465,13 @@ public class RootLayoutController {
         tmp = new File(path.getAbsolutePath() + File.separator
                 + listFile.getSelectionModel().getSelectedItem().toString());
         cuted = true;
+
+        /*try {
+            tmp = File.createTempFile("cut",null,null);
+            System.out.println(tmp.getCanonicalPath());
+        }   catch (IOException e){
+
+        }*/
     }
 
     @FXML
@@ -447,17 +479,44 @@ public class RootLayoutController {
         tmp = new File(path.getAbsolutePath() + File.separator
                 + listFile.getSelectionModel().getSelectedItem().toString());
         cuted = false;
+        /*File source = new File(path.getAbsolutePath() + File.separator
+                + listFile.getSelectionModel().getSelectedItem());
+        try {
+          tmp = File.createTempFile("copy",null,null);
+          Files.copy(source.toPath(),tmp.toPath());
+        }   catch (IOException e){
+            e.printStackTrace();
+        }*/
     }
 
     @FXML
     private void setOnPasteHandler() {
-        if (tmp != null)
-            if (Copy.Dir(tmp.getAbsolutePath(), path.getAbsolutePath() + File.separator + tmp.getName()) && cuted)
-                Delete.Delete(tmp);
-        if (path.exists() && path.isDirectory())
-            listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
-        cuted = false;
-        listFile.scrollTo(0);
+        mainApp.getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (tmp != null)
+                        if (Copy.Dir(tmp.getAbsolutePath(), path.getAbsolutePath() + File.separator + tmp.getName()) && cuted) {
+                            Delete.Delete(tmp);
+                            tmp = null;
+                            cuted = false;
+                        }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            //loadIndicator.setVisible(false);
+                            mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+                            listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
+                            listFile.scrollTo(0);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     @FXML
@@ -468,13 +527,32 @@ public class RootLayoutController {
         alert.setTitle("Удалить файл?");
         alert.setHeaderText("Удалить файл?");
         alert.setContentText("При нажатии кнопки отмена, файл не будет удален");
-        ButtonType buttonTypeSave = new ButtonType("Удалить", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonTypeDelete = new ButtonType("Удалить", ButtonBar.ButtonData.OK_DONE);
         ButtonType buttonTypeCancel = new ButtonType("Отмена", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonTypeCancel, buttonTypeSave);
+        alert.getButtonTypes().setAll(buttonTypeCancel, buttonTypeDelete);
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeSave) {
-            if (Delete.Delete(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem().toString())) && path.exists() && path.isDirectory())
-                listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
+        if (result.get() == buttonTypeDelete) {
+            mainApp.getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Delete.Delete(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem()));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    } finally {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                //loadIndicator.setVisible(false);
+                                mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+                                listFile.setItems(FXCollections.observableArrayList(Open.Dir(path, "")));
+                                listFile.scrollTo(0);
+                            }
+                        });
+                    }
+                }
+            }).start();
         } else if (result.get() == buttonTypeCancel) {
             alert.close();
             return;
@@ -536,10 +614,35 @@ public class RootLayoutController {
             } else {
                 tmp = new File(pathField.getText());
                 if (tmp.isDirectory()) {
+                   /* if (Open.Dir(tmp, "") == null)
+                        throw new Exception("Access denied");
+                    path = tmp.getAbsoluteFile();
+                    listFile.setItems(FXCollections.observableArrayList(Open.Dir(tmp, "")));*/
                     if (Open.Dir(tmp, "") == null)
                         throw new Exception("Access denied");
-                    listFile.setItems(FXCollections.observableArrayList(Open.Dir(tmp, "")));
-                    path = tmp.getAbsoluteFile();
+                    else {
+                        mainApp.getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(200);
+                                } catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                } finally {
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //loadIndicator.setVisible(false);
+                                            mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+                                            path = tmp.getAbsoluteFile();
+                                            listFile.setItems(FXCollections.observableArrayList(Open.Dir(tmp, "")));
+                                        }
+                                    });
+                                }
+                            }
+                        }).start();
+                    }
                 } else if (tmp.isFile()) {
                     if (Open.File(tmp) != null)
                         throw new Exception(Open.File(tmp));
@@ -556,28 +659,28 @@ public class RootLayoutController {
             alert.setContentText(pathField.getText() + ".");
             alert.showAndWait();
         }
-        if (path != null)
-            pathField.setText(path.getAbsolutePath());
-        else if (path.getParent() != null)
-            pathField.setText(path.getName());
-        else
+        if (path == null)
+            pathField.setText(pc);
+        else if (path.getParent() == null)
             pathField.setText(FileSystemView.getFileSystemView().getSystemIcon(path) + " " + path.getAbsolutePath());
+        else
+            pathField.setText(path.getName());
     }
 
     @FXML
     private void setAddToFavoriteHandler() {
         /*System.out.println(listFile.getSelectionModel().getSelectedItem());
         listFavorite.getItems().add(listFile.getSelectionModel().getSelectedItem());*/
-        if (listFile.getSelectionModel().getSelectedItem() != null) {
+        /*if (listFile.getSelectionModel().getSelectedItem() != null) {
             if (path.getParent() == null)
                 //image.setImage(new Image(new File(path.getAbsolutePath() + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), true));
-                mainApp.getRootLayout().setRight(new ImageView(new Image(new File(path.getAbsolutePath() +  listFile.getSelectionModel().getSelectedItem()).toURI().toString(), 160, 160, true, true, true)));
+                mainApp.getRootLayout().setRight(new ImageView(new Image(new File(path.getAbsolutePath() + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), 160, 160, true, true, true)));
             else if (path != null && path.getParent() != null)
                 //image.setImage(new Image(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), true));
                 mainApp.getRootLayout().setRight(new ImageView(new Image(new File(path.getAbsolutePath() + File.separator + listFile.getSelectionModel().getSelectedItem()).toURI().toString(), 160, 160, true, true, true)));
-        } //else
-            //image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
-            //mainApp.getRootLayout().setRight(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/explorer.png"))));
+        }*/ //else
+        //image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
+        //mainApp.getRootLayout().setRight(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/explorer.png"))));
         //mainApp.getRootLayout().setRight(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/explorer.png"))));
     }
 
@@ -587,6 +690,7 @@ public class RootLayoutController {
         alert.setTitle("FileBrowser");
         alert.setHeaderText("FileBrowserApp\nfor desktop");
         alert.setContentText("Author: SmirnovDS\n@null_ds");
+        alert.setGraphic(new ImageView(image.getImage()));
         alert.showAndWait();
     }
 

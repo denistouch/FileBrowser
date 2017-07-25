@@ -29,7 +29,7 @@ public class Copy {
             }
             return true;
         } else {
-            return Copy.File(source,destination);
+            return File(source,destination);
         }
     }
 
@@ -40,7 +40,7 @@ public class Copy {
         if (sourceFile.exists() && sourceFile.isFile() && !destinationFile.exists()) {
             try (InputStream inputStream = new FileInputStream(sourceFile);
                  OutputStream outputStream = new FileOutputStream(destinationFile)) {
-                byte[] buffer = new byte[128];
+                byte[] buffer = new byte[1024];
                 int bytes;
                 while ((bytes = inputStream.read(buffer)) > 0) {
                     outputStream.write(buffer, 0, bytes);

@@ -29,13 +29,11 @@ public class MainApp extends Application {
         initRootLayout();
     }
 
-    public MainApp() {
-
-    }
+    public MainApp() {   }
 
     public void initRootLayout() {
         try {
-            primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("icon/explorer.png")));
+            primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("icon/explorer_new.png")));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
