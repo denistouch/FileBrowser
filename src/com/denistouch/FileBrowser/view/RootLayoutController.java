@@ -428,6 +428,7 @@ public class RootLayoutController {
                 @Override
                 public void run() {
                     try {
+                        path = path.getParentFile();
                         Thread.sleep(200);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -436,7 +437,6 @@ public class RootLayoutController {
                             @Override
                             public void run() {
                                 mainApp.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
-                                path = path.getParentFile();
                                 if (path == null)
                                     listFile.setItems(FXCollections.observableArrayList(listRoots));
                                 else if (path.exists() && path.isDirectory())
