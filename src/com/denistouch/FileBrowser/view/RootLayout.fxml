@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -57,6 +58,11 @@
                 <MenuItem fx:id="pasteItem" mnemonicParsing="false" onAction="#setOnPasteHandler" text="Вставить" />
                   <MenuItem fx:id="renameItem" mnemonicParsing="false" onAction="#setOnRenameHandler" text="Переименовать" />
                   <MenuItem fx:id="deleteItem" mnemonicParsing="false" onAction="#setOnDeleteHandler" text="Удалить" />
+                  <MenuItem mnemonicParsing="false" onAction="#setOnFindHandler" text="find" visible="false">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
               </items>
             </ContextMenu>
          </contextMenu>

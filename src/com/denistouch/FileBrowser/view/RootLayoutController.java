@@ -676,6 +676,11 @@ public class RootLayoutController {
     }
 
     @FXML
+    private void setOnFindHandler(){
+        findField.requestFocus();
+    }
+
+    @FXML
     private void setAddToFavoriteHandler() {
         /*System.out.println(listFile.getSelectionModel().getSelectedItem());
         listFavorite.getItems().add(listFile.getSelectionModel().getSelectedItem());*/
