@@ -29,7 +29,7 @@
          </rowConstraints>
          <children>
             <TextField fx:id="pathField" prefWidth="455.0" GridPane.columnIndex="2" />
-            <TextField fx:id="findField" prefWidth="170.0" promptText="Search files in this folder" GridPane.columnIndex="3" />
+            <TextField fx:id="findField" prefWidth="170.0" promptText="Поиск в:" GridPane.columnIndex="3" />
             <Button mnemonicParsing="false" onAction="#setOnUpHandler" prefHeight="22.0" prefWidth="34.0" text="...">
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -49,14 +49,14 @@
          <contextMenu>
             <ContextMenu fx:id="contextMenu">
               <items>
-                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#setOnOpenHandler" text="Open" />
-                  <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#setOnNewHandler" text="New" />
-                  <MenuItem fx:id="showItem" mnemonicParsing="false" onAction="#setAddToFavoriteHandler" text="Show" visible="false" />
-                  <MenuItem fx:id="cutItem" mnemonicParsing="false" onAction="#setOnCutHandler" text="Cut" />
-                  <MenuItem fx:id="copyItem" mnemonicParsing="false" onAction="#setOnCopyHandler" text="Copy" />
-                <MenuItem fx:id="pasteItem" mnemonicParsing="false" onAction="#setOnPasteHandler" text="Paste" />
-                  <MenuItem fx:id="renameItem" mnemonicParsing="false" onAction="#setOnRenameHandler" text="Rename" />
-                  <MenuItem fx:id="deleteItem" mnemonicParsing="false" onAction="#setOnDeleteHandler" text="Delete" />
+                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#setOnOpenHandler" text="Открыть" />
+                  <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#setOnNewHandler" text="Создать папку" />
+                  <MenuItem fx:id="showItem" mnemonicParsing="false" onAction="#setAddToFavoriteHandler" text="Показать" visible="false" />
+                  <MenuItem fx:id="copyItem" mnemonicParsing="false" onAction="#setOnCopyHandler" text="Копировать" />
+                  <MenuItem fx:id="cutItem" mnemonicParsing="false" onAction="#setOnCutHandler" text="Вырезать" />
+                <MenuItem fx:id="pasteItem" mnemonicParsing="false" onAction="#setOnPasteHandler" text="Вставить" />
+                  <MenuItem fx:id="renameItem" mnemonicParsing="false" onAction="#setOnRenameHandler" text="Переименовать" />
+                  <MenuItem fx:id="deleteItem" mnemonicParsing="false" onAction="#setOnDeleteHandler" text="Удалить" />
               </items>
             </ContextMenu>
          </contextMenu>

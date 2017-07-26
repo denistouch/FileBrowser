@@ -34,6 +34,7 @@ public class MainApp extends Application {
     public void initRootLayout() {
         try {
             primaryStage.getIcons().add(new Image(MainApp.class.getResourceAsStream("icon/explorer_new.png")));
+            primaryStage.setTitle("Проводник");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
@@ -53,5 +54,10 @@ public class MainApp extends Application {
 
     public BorderPane getRootLayout() {
         return rootLayout;
+    }
+
+    public String version(){
+        String version = "1.0";
+        return version;
     }
 }

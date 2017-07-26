@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
@@ -117,6 +119,13 @@ public class RootLayoutController {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 textArea.setWrapText(wrapping.isSelected());
+                if (textArea.isWrapText()) {
+                    labelShow.setDisable(true);
+                    label.setVisible(false);
+                }   else {
+                    labelShow.setDisable(false);
+                    label.setVisible(true);
+                }
                 //деактивировать labelShow и скрывать label
             }
         });
@@ -133,7 +142,6 @@ public class RootLayoutController {
                 labelShow.setSelected(label.isVisible());
             }
         });
-        System.out.println(RootLayoutController.class.getName());
     }
 
 
@@ -580,7 +588,8 @@ public class RootLayoutController {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("О программе");
         alert.setHeaderText("Программа NotePad v" + mainApp.version());
-        alert.setContentText("Автор: denisTouch");
+        alert.setContentText("Разработчик: SmirnovDS\n@null_ds");
+        alert.setGraphic(new ImageView(new Image(MainApp.class.getResourceAsStream("icon/notepad.png"))));
         alert.showAndWait();
     }
 

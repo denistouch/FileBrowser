@@ -95,6 +95,8 @@ public class RootLayoutController {
         listFile.setItems(FXCollections.observableArrayList(listRoots));
         pathField.setText(pc);
         fileInfo.setText(null);
+        findField.setDisable(true);
+        findField.setPromptText(null);
         icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/pc.png")));
         image.setImage(new Image(MainApp.class.getResourceAsStream("icon/explorer_new.png")));
 
@@ -138,14 +140,20 @@ public class RootLayoutController {
                 if (path == null) {
                     pathField.setText(pc);
                     icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/pc.png")));
+                    findField.setDisable(true);
+                    findField.setPromptText(null);
                     //icon.setImage(Icon.getFileIcon(FileSystemView.getFileSystemView().getParentDirectory(path).getAbsolutePath()));
                 } else if (path.getParent() == null) {
                     pathField.setText(FileSystemView.getFileSystemView().getSystemIcon(path) + " " + path.getAbsolutePath());
                     icon.setImage(Icon.getFileIcon(path.getAbsolutePath()));
+                    findField.setPromptText("Поиск в: " + path.getAbsolutePath());
+                    findField.setDisable(false);
                 } else {
                     pathField.setText(path.getName());
                     //icon.setImage(new Image(MainApp.class.getResourceAsStream("icon/folder.png")));
                     icon.setImage(Icon.getFileIcon(path.getAbsolutePath()));
+                    findField.setPromptText("Поиск в: " + path.getName());
+                    findField.setDisable(false);
                 }
             }
         });
@@ -687,9 +695,9 @@ public class RootLayoutController {
     @FXML
     private void setAboutHandler() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("FileBrowser");
-        alert.setHeaderText("FileBrowserApp\nfor desktop");
-        alert.setContentText("Author: SmirnovDS\n@null_ds");
+        alert.setTitle("Проводник");
+        alert.setHeaderText("Программа FileBrowser v" + mainApp.version());
+        alert.setContentText("Разработчик: SmirnovDS\n@null_ds");
         alert.setGraphic(new ImageView(image.getImage()));
         alert.showAndWait();
     }
